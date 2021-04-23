@@ -78,7 +78,7 @@ export default class Contact extends Component {
     }
 
     onChangePhoto(e) {
-        const photo = e.target.value
+        const photo = e.target.files
         this.setState(function(prevState) {
             return {
                 currentContact: {
@@ -90,12 +90,12 @@ export default class Contact extends Component {
     }
 
     updateContact() {
-        var formData= {
-            firstName: this.state.currentContact.firstName,
-            lastName: this.state.currentContact.lastName,
-            age: this.state.currentContact.age,
-            photo: this.state.currentContact.photo,
-        }
+        const formData = new FormData()
+        formData.append("firstName", this.state.currentContact.firstName)
+        formData.append("lastName", this.state.currentContact.lastName)
+        formData.append("age", this.state.currentContact.age)
+        formData.append("photo", this.state.currentContact.photo)
+        
         ContactService.update(
             this.state.currentContact.id,
             formData
@@ -160,21 +160,13 @@ export default class Contact extends Component {
                     <div className="form-group">
                         <label htmlFor="photo">Photo</label>
                         <input
-                        type="text"
+                        type="file"
                         className="form-control"
                         id="photo"
-                        value={currentContact.photo}
                         onChange={this.onChangePhoto}
                         />
                     </div>
                     </form>
-
-                    <button
-                    className="badge badge-danger mr-2"
-                    onClick={this.deleteContact}
-                    >
-                    Delete
-                    </button>
 
                     <button
                     type="submit"

@@ -7,6 +7,8 @@ export default class ListContacts extends Component {
         super(props)
         this.retrieveContacts = this.retrieveContacts.bind(this)
         this.setActiveContact = this.setActiveContact.bind(this)
+        this.deleteContact = this.deleteContact.bind(this)
+        this.addContact = this.addContact.bind(this)
         this.state = {
             contacts: [],
             currentIndex: -1,
@@ -38,6 +40,20 @@ export default class ListContacts extends Component {
         })
     }
 
+    deleteContact() {
+        ContactService.delete(
+            this.state.currentContact.id
+        ).then(response => {
+            this.props.history.push("/contact")
+        }).catch(e => {
+            console.log(e)
+        })
+    }
+
+    addContact() {
+        this.props.history.push("/add")
+    }
+
     render() {
         const { contacts, currentContact, currentIndex } = this.state;
         return(
@@ -57,6 +73,12 @@ export default class ListContacts extends Component {
                             </li>
                         ))}
                     </ul>
+                    <button
+                        className="m-3 btn btn-sm btn-success"
+                        onClick={this.addContact}
+                    >
+                        Add Contact
+                    </button>
                 </div>
                 <div className="col-md-6">
                     {currentContact ? (
@@ -64,13 +86,13 @@ export default class ListContacts extends Component {
                             <h4>Contact Info</h4>
                             <div>
                                 <label>
-                                    <strong>Fullname</strong>
+                                    <strong>Fullname : </strong>
                                 </label> {" "}
                                 {currentContact.firstName + " " + currentContact.lastName}
                             </div>
                             <div>
                                 <label>
-                                    <strong>Age</strong>
+                                    <strong>Age : </strong>
                                 </label> {" "}
                                 {currentContact.age}
                             </div>
@@ -78,9 +100,15 @@ export default class ListContacts extends Component {
                                 <label>
                                     <strong>Photo</strong>
                                 </label> {" "}
+                                <br />
                                 <img src={currentContact.photo} />
                             </div>
-                            <Link to={"/contact/" + currentContact.id} className="badge badge-warning">Edit</Link>
+                            <div>
+                                <Link to={"/contact/" + currentContact.id} className="badge badge-warning">Edit</Link>
+                                {"   "}
+                                <Link className="badge badge-danger mr-2" onClick={this.deleteContact}>Delete</Link>
+                            </div>
+                            
                         </div>
                     )  : (
                         <div>
