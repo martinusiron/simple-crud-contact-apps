@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import { Switch, Route, Link } from 'react-router-dom'
+import "bootstrap/dist/css/bootstrap.css"
+import "./App.css"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// import AddContact from './components/addContact'
+// import Contact from './components/detailContact'
+import ListContact from './components/listContacts'
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <nav className="navbar navbar-expand navbar-dark bg-dark">
+          <a href="/contacts" className="navbar-brand">
+            Simple CRUD Contacts App
+          </a>
+          <div className="navvar-nav mr-auto">
+            <li className="nav-item">
+              <Link to={"/contacts"} className="nav-link">Contacts</Link>
+              <Link to={"/add"} className="nav-link">Add Contact</Link>
+            </li>
+          </div>
+        </nav>
+        <div className="container mt-3">
+          <Switch>
+            <Route exact path={["/", "/contact"]} component={ListContact} />
+            {/* <Route exact path="/add" component={AddContact} />
+            <Route exact path="/contact/:id" component={Contact} /> */}
+          </Switch>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default App;
