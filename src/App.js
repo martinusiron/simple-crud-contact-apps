@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.css"
 import "./App.css"
 
 // import AddContact from './components/addContact'
-// import Contact from './components/detailContact'
+import Contact from './components/detailContact'
 import ListContact from './components/listContacts'
 
 class App extends Component {
@@ -12,12 +12,12 @@ class App extends Component {
     return (
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <a href="/contacts" className="navbar-brand">
+          <a href="/contact" className="navbar-brand">
             Simple CRUD Contacts App
           </a>
           <div className="navvar-nav mr-auto">
             <li className="nav-item">
-              <Link to={"/contacts"} className="nav-link">Contacts</Link>
+              <Link to={"/contact"} className="nav-link">Contacts</Link>
               <Link to={"/add"} className="nav-link">Add Contact</Link>
             </li>
           </div>
@@ -25,8 +25,8 @@ class App extends Component {
         <div className="container mt-3">
           <Switch>
             <Route exact path={["/", "/contact"]} component={ListContact} />
-            {/* <Route exact path="/add" component={AddContact} />
-            <Route exact path="/contact/:id" component={Contact} /> */}
+            {/* <Route exact path="/add" component={AddContact} /> */}
+            <Route exact path="/contact/:id" component={Contact} />
           </Switch>
         </div>
       </div>
