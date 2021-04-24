@@ -37,7 +37,8 @@ export default class ListContacts extends Component {
     setActiveContact(contact, index) {
         this.setState({
             currentContact: contact,
-            currentIndex: index
+            currentIndex: index,
+            message: ""
         })
     }
 
