@@ -11,7 +11,6 @@ export default class Contact extends Component {
 
         this.getContact = this.getContact.bind(this)
         this.updateContact = this.updateContact.bind(this)
-        this.deleteContact = this.deleteContact.bind(this)
 
         this.state = {
             currentContact: {
@@ -26,6 +25,7 @@ export default class Contact extends Component {
     }
 
     componentDidMount() {
+        var id = this.props.match.params.id
         this.getContact(this.props.match.params.id)
     }
 
@@ -35,9 +35,10 @@ export default class Contact extends Component {
             this.setState({
                 currentContact: response.data.data
             })
-            console.log("response by id: ", response.data.data)
         }).catch(e => {
-            console.log(e)
+            this.setState({
+                message: e.response.data.message
+            })
         })
     }
 
@@ -101,21 +102,13 @@ export default class Contact extends Component {
             formData
         ).then(response => {
             this.setState({
-                message: "The contact was updated successfully"
+                message: response.data.message
             })
             this.props.history.push("/contact")
         }).catch(e => {
-            console.log(e)
-        })
-    }
-
-    deleteContact() {
-        ContactService.delete(
-            this.state.currentContact.id
-        ).then(response => {
-            this.props.history.push("/contact")
-        }).catch(e => {
-            console.log(e)
+            this.setState({
+                message: e.response.data.message
+            })
         })
     }
 
@@ -175,7 +168,7 @@ export default class Contact extends Component {
                     >
                     Update
                     </button>
-                    <p>{this.state.message}</p>
+                    <p className="error-msg">{this.state.message}</p>
                 </div>
                 ) : (
                 <div>

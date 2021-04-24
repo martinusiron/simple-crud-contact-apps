@@ -10,16 +10,17 @@ export default class AddContact extends Component {
         this.onChangePhoto = this.onChangePhoto.bind(this)
 
         this.saveContact = this.saveContact.bind(this)
-        this.newContact = this. newContact.bind(this)
+        this.newContact = this.newContact.bind(this)
 
         this.state = {
             id: null,
             firstName: "",
             lastName: "",
             age: 0,
-            photo: undefined,
+            photo: "",
             submitted: false,
-            showModal: false
+            showModal: false,
+            message: ""
         }
     }
 
@@ -51,23 +52,27 @@ export default class AddContact extends Component {
         })
     }
 
-    saveContact() {
+    saveContact(e) {
+        this.setState({
+            submitted: true
+        })
+        e.preventDefault()
         const formData = new FormData()
         formData.append("firstName", this.state.firstName)
         formData.append("lastName", this.state.lastName)
         formData.append("age", this.state.age)
-        formData.append("photo", this.state.photo)
+        formData.append("photo", "N/A")
         
         ContactService.create(formData)
         .then(response => {
-            setTimeout(() =>
-            {
-                this.setState({ showModal: true });
-            },200)
-            this.props.history.push("/contact")
-            console.log("response create: ", response.data)
+            this.setState({
+                message: response.data.message
+            })
+            this.props.history.push({pathname: "/contact"})
         }).catch(e => {
-            console.log(e)
+            this.setState({
+                message: e.response.data.message
+            })
         })
     }
 
@@ -85,71 +90,68 @@ export default class AddContact extends Component {
     render() {
         return (
             <div className="submit-form">
-                {this.state.submitted ? (
                 <div>
-                    <h4>You submitted successfully!</h4>
-                    <button className="btn btn-success" onClick={this.newContact}>
-                    Add
-                    </button>
-                </div>
-                ) : (
-                <div>
-                    <div className="form-group">
-                    <label htmlFor="firstName">First Name</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="firstName"
-                        required
-                        value={this.state.firstName}
-                        onChange={this.onChangeFirstName}
-                        name="firstName"
-                    />
-                    </div>
+                    <form onSubmit={this.saveContact}>
+                        <div className="form-group">
+                            <label htmlFor="firstName">First Name</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="firstName"
+                                required
+                                value={this.state.firstName}
+                                onChange={this.onChangeFirstName}
+                                name="firstName"
+                            />
+                            {this.state.submitted && !this.state.firstName && <span className="error-msg">Please enter a first name</span>}
+                        </div>
 
-                    <div className="form-group">
-                    <label htmlFor="lastName">Last Name</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="lastName"
-                        required
-                        value={this.state.lastName}
-                        onChange={this.onChangeLastName}
-                        name="lastName"
-                    />
-                    </div>
+                        <div className="form-group">
+                            <label htmlFor="lastName">Last Name</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="lastName"
+                                required
+                                value={this.state.lastName}
+                                onChange={this.onChangeLastName}
+                                name="lastName"
+                            />
+                            {this.state.submitted && !this.state.lastName && <span className="error-msg">Please enter a last name</span>}
+                        </div>
 
-                    <div className="form-group">
-                    <label htmlFor="age">Age</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="age"
-                        required
-                        value={this.state.age}
-                        onChange={this.onChangeAge}
-                        name="age"
-                    />
-                    </div>
-        
-                    <div className="form-group">
-                    <label htmlFor="photo">Photo</label>
-                    <input
-                        type="file"
-                        className="form-control"
-                        id="photo"
-                        required
-                        onChange={this.onChangePhoto}
-                        name="photo"
-                    />
-                    </div>
-        
-                    <button onClick={this.saveContact} className="btn btn-success">
-                    Submit
-                    </button>
+                        <div className="form-group">
+                            <label htmlFor="age">Age</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="age"
+                                required
+                                value={this.state.age}
+                                onChange={this.onChangeAge}
+                                name="age"
+                            />
+                            {this.state.submitted && !this.state.age && <span className="error-msg">Please enter age</span>}
+                        </div>
+            
+                        <div className="form-group">
+                            <label htmlFor="photo">Photo</label>
+                            <input
+                                type="file"
+                                className="form-control"
+                                id="photo"
+                                required
+                                onChange={this.onChangePhoto}
+                                name="photo"
+                            />
+                            {this.state.submitted && !this.state.photo && <span className="error-msg">Please upload photo</span>}
+                        </div>
+            
+                        <button type="submit" className="btn btn-success">
+                            Submit
+                        </button>
+                    </form>
                 </div>
-                )}
             </div>
         )
     }

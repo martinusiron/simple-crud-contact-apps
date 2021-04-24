@@ -13,6 +13,7 @@ export default class ListContacts extends Component {
             contacts: [],
             currentIndex: -1,
             currentContact: null,
+            message: ""
         }
     }
 
@@ -26,14 +27,14 @@ export default class ListContacts extends Component {
             this.setState({
                 contacts: response.data.data
             })
-            console.log("response: ", response.data.data)
         }).catch(e => {
-            console.log(e)
+            this.setState({
+                message: e.response.data.message
+            })
         })
     }
 
     setActiveContact(contact, index) {
-        console.log("contact: ", contact)
         this.setState({
             currentContact: contact,
             currentIndex: index
@@ -45,8 +46,10 @@ export default class ListContacts extends Component {
             this.state.currentContact.id
         ).then(response => {
             this.props.history.push("/contact")
-        }).catch(e => {
-            console.log(e)
+        }).catch((e) => {
+            this.setState({
+                message: e.response.data.message
+            })
         })
     }
 
@@ -106,9 +109,9 @@ export default class ListContacts extends Component {
                             <div>
                                 <Link to={"/contact/" + currentContact.id} className="badge badge-warning">Edit</Link>
                                 {"   "}
-                                <Link className="badge badge-danger mr-2" onClick={this.deleteContact}>Delete</Link>
+                                <Link to="" className="badge badge-danger mr-2" onClick={this.deleteContact}>Delete</Link>
                             </div>
-                            
+                            <p className="error-msg">{this.state.message}</p>
                         </div>
                     )  : (
                         <div>
